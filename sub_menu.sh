@@ -28,6 +28,13 @@ function menu {
 					echo "---------------------------------------------------------------------------------"
                    insertInTable $path $tableName
 				break ;;
+				"Select from Table" )
+					echo "---------------------------------------------------------------------------------"
+					echo "Enter a table name to show its data: "
+					read -re tableName
+					echo "---------------------------------------------------------------------------------"
+					selectFromTable $path $tableName
+				break ;;
 				"Update Table" )
 					echo "---------------------------------------------------------------------------------"
 					echo "Enter the name of the table: "
@@ -36,14 +43,7 @@ function menu {
 					echo "Enter the name of the primary key: "
 					read -re PK
 					echo "---------------------------------------------------------------------------------"
-                   updateTable $path $tableName $PK
-				break ;;
-				"Select from Table" )
-					echo "---------------------------------------------------------------------------------"
-					echo "Enter a table name to show its data: "
-					read -re tableName
-					echo "---------------------------------------------------------------------------------"
-					selectFromTable $path $tableName
+                   	updateTable $path $tableName $PK
 				break ;;
 				"Delete Table" )
 					echo "---------------------------------------------------------------------------------"

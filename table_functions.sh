@@ -236,6 +236,7 @@ function insertInTable {
     fi
 }
 
+
 function updateTable {
     if [ ! -f "$1/$2.data" ]
     then
@@ -254,7 +255,7 @@ function updateTable {
         found=false
         for i in "${PK[@]}"
         do
-            if [ "$i" -eq "$3" ] ; then
+            if [ "$i" = "$3" ] ; then
                 found=true
             fi
         done
@@ -269,41 +270,100 @@ function updateTable {
                 do
                     echo "Enter data for column ${colNames[counter]}"
                     read -r entry
-                    if [ "${colTypes[counter]}" = "int" ] 
+                    if [ "$entry" != "" ] 
                     then
-                        if [[ "$entry" =~ ^[0-9]+$ ]]
+                        if [[ $counter == 0 ]]
                         then
-                            if [ "$counter" = "$temp" ]
+                            if [ "${colTypes[counter]}" = "int" ] 
+                                then
+                                    if [[ "$entry" =~ ^[0-9]+$ ]]
+                                    then
+                                        found=false
+                                        for i in "${PK[@]}"
+                                        do
+                                            if [ "$i" -eq "$entry" ] ; then
+                                                found=true
+                                            fi
+                                        done
+                                        if ! $found
+                                        then
+                                            if [ "$counter" = "$temp" ]
+                                            then
+                                                data+=$entry
+                                            else 
+                                                data+="$entry:"
+                                            fi
+                                            validFlag=true
+                                        else
+                                            echo "PK exists"
+                                        fi
+                                    else 
+                                        echo "Wrong datatype"
+                                    fi
+                                else 
+                                    if [[ "$entry" =~ ^([[:lower:]]|[[:upper:]])+$ ]]
+                                    then
+                                        found=false
+                                        for i in "${PK[@]}"
+                                        do
+                                            if [ "$i" = "$entry" ] ; then
+                                                found=true
+                                            fi
+                                        done
+                                        if ! $found
+                                        then
+                                            if [ "$counter" = "$temp" ]
+                                            then
+                                                data+=$entry
+                                            else 
+                                                data+="$entry:"
+                                            fi
+                                            validFlag=true
+                                        else
+                                            echo "PK exists"
+                                        fi
+                                    else 
+                                        echo "Wrong datatype"
+                                    fi
+                                fi
+                        elif [ "${colTypes[counter]}" = "int" ] 
+                        then
+                            if [[ "$entry" =~ ^[0-9]+$ ]]
                             then
-                                data+=$entry
+                                if [ "$counter" = "$temp" ]
+                                then
+                                    data+=$entry
+                                else 
+                                    data+="$entry:"
+                                fi
+                                validFlag=true
                             else 
-                                data+="$entry:"
+                                echo "Wrong datatype"
                             fi
-                            validFlag=true
                         else 
-                            echo "Wrong datatype"
+                            if [[ "$entry" =~ ^([[:lower:]]|[[:upper:]])+$ ]]
+                            then
+                                if [ "$counter" = "$temp" ]
+                                then
+                                    data+=$entry
+                                else 
+                                    data+="$entry:"
+                                fi
+                                validFlag=true
+                            else 
+                                echo "Wrong datatype"
+                            fi
                         fi
                     else 
-                        if [[ "$entry" =~ ^([[:lower:]]|[[:upper:]])+$ ]]
-                        then
-                            if [ "$counter" = "$temp" ]
-                            then
-                                data+=$entry
-                            else 
-                                data+="$entry:"
-                            fi
-                            validFlag=true
-                        else 
-                            echo "Wrong datatype"
-                        fi
+                        echo "Invalid input"
                     fi
                 done
                 let counter=$counter+1
             done
             # echo $data >> $filePath.data
             grep "^$3" $1/$2.data | xargs -I '{}' sed -i "s/{}/$data/g" $1/$2.data
-    fi
         else
             echo "PK not found"
         fi
+    fi
 }

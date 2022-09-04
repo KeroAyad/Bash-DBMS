@@ -18,7 +18,11 @@ function mainmenu {
 					# echo $dbName
 					
 					# echo $valid
-					createDatabase $dbName
+					if [ "$#" -gt 1 ]
+					then
+						echo "Please enter one word!"
+					else
+						createDatabase $dbName
 					echo "---------------------------------------------------------------------------------"
 				break ;;
 				"Connect to Database" )
