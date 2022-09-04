@@ -7,7 +7,7 @@ function menu {
 	do
 		PS3="Enter your choice: "
 		echo "---------------------------------------------------------------------------------"
-		select i in "Show Tables" "Create Table" "Insert in Table" "Select from Table" "Delete Table" "Back to Main Menu"
+		select i in "Show Tables" "Create Table" "Insert in Table" "Update Table" "Select from Table" "Delete Table" "Back to Main Menu"
 		do
 			case $i in
 				"Show Tables" ) 
@@ -27,6 +27,16 @@ function menu {
 					read -re tableName
 					echo "---------------------------------------------------------------------------------"
                    insertInTable $path $tableName
+				break ;;
+				"Update Table" )
+					echo "---------------------------------------------------------------------------------"
+					echo "Enter the name of the table: "
+					read -re tableName
+					echo "---------------------------------------------------------------------------------"
+					echo "Enter the name of the primary key: "
+					read -re PK
+					echo "---------------------------------------------------------------------------------"
+                   updateTable $path $tableName $PK
 				break ;;
 				"Select from Table" )
 					echo "---------------------------------------------------------------------------------"
