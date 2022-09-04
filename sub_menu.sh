@@ -40,20 +40,9 @@ function menu {
 					echo "Enter a table name to delete: "
 					read -re tableName
 					echo "---------------------------------------------------------------------------------"
-					echo "1) Delete the whole table"
-					echo "2) Delete a record from the table"
-					read -re choice
-					case $choice in
-						1 ) 
-						deleteTable $path $tableName
-						;;
-						2 ) 
-						deleteRecordFromTable $path $tableName
-						;;
-						* ) 
-						echo "This is not a valid choice"
-						;;
-					esac
+					# read -re choice
+					deleteTable $path $tableName
+					echo "---------------------------------------------------------------------------------"
 				break ;;
 				"Back to Main Menu" )
 					return
